@@ -11,17 +11,19 @@ import { vendorSchema } from "./models/schemas";
 import { tempFile } from "./library/utility";
 
 describe("write, read", () => {
-  test("Vendor", async () => {
+  test("Vendor-ironSource", async () => {
+    const ds = new Date();
     const filename = tempFile("fruits.parquet");
+    console.log(filename);
 
+    /* WRITE */
     var writer = await parquet.ParquetWriter.openFile(vendorSchema, filename);
 
-    // append a few rows to the file
     await writer.appendRow({
       name: "apples",
       quantity: 10,
       price: 2.5,
-      date: new Date(),
+      date: ds,
       in_stock: true,
     });
 
@@ -29,14 +31,16 @@ describe("write, read", () => {
       name: "oranges",
       quantity: 10,
       price: 2.5,
-      date: new Date(),
+      date: ds,
       in_stock: true,
     });
 
+    // Close! Bad things happen we we don't
     await writer.close();
 
-    let reader = await parquet.ParquetReader.openFile(filename);
+    /* READ */
 
+    let reader = await parquet.ParquetReader.openFile(filename);
     // create a new cursor
     let cursor = reader.getCursor();
 
@@ -46,6 +50,7 @@ describe("write, read", () => {
       console.log(record);
     }
 
+    // Close! Bad things happen when we don't
     await reader.close();
   });
 });
