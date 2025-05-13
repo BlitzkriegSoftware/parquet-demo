@@ -7,32 +7,39 @@ import { describe, test, expect } from "@jest/globals";
 
 import parquet from "parquetjs";
 
-import { vendorSchema } from "./models/schemas";
+import { Fruit, vendorSchema } from "./models/schemas";
 import { tempFile } from "./library/utility";
+import { RowInterface } from "parquetjs/lib/row.interface";
 
 describe("write, read", () => {
   test("Vendor-ironSource", async () => {
     const ds = new Date();
+
+    const data: Array<Fruit> = [
+      {
+        name: "apples",
+        quantity: 10,
+        price: 2.5,
+        date: ds,
+        in_stock: true,
+      },
+      {
+        name: "oranges",
+        quantity: 10,
+        price: 2.5,
+        date: ds,
+        in_stock: true,
+      },
+    ];
+
     const filename = tempFile("fruits.parquet");
     console.log(filename);
 
     /* WRITE */
-    var writer = await parquet.ParquetWriter.openFile(vendorSchema, filename);
+    const writer = await parquet.ParquetWriter.openFile(vendorSchema, filename);
 
-    await writer.appendRow({
-      name: "apples",
-      quantity: 10,
-      price: 2.5,
-      date: ds,
-      in_stock: true,
-    });
-
-    await writer.appendRow({
-      name: "oranges",
-      quantity: 10,
-      price: 2.5,
-      date: ds,
-      in_stock: true,
+    data.forEach(async (d) => {
+      await writer.appendRow(d);
     });
 
     // Close! Bad things happen we we don't
@@ -40,14 +47,16 @@ describe("write, read", () => {
 
     /* READ */
 
-    let reader = await parquet.ParquetReader.openFile(filename);
+    const reader = await parquet.ParquetReader.openFile(filename);
     // create a new cursor
-    let cursor = reader.getCursor();
+    const cursor = reader.getCursor();
 
     // read all records from the file and print them
-    let record;
+    let record: RowInterface;
     while ((record = await cursor.next())) {
       console.log(record);
+      const result = data.find((d) => d.name == record.name);
+      expect(result).toBeDefined();
     }
 
     // Close! Bad things happen when we don't

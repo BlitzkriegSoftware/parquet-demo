@@ -1,14 +1,19 @@
 "use strict";
 
-import parquet from 'parquetjs';
+import parquet from "parquetjs";
 
-/**
- * library owner schema
- */
+export type Fruit = {
+  name: string;
+  quantity: number;
+  price: number;
+  date: Date;
+  in_stock: boolean;
+};
+
 export const vendorSchema = new parquet.ParquetSchema({
-  name: { type: 'UTF8' },
-  quantity: { type: 'INT64' },
-  price: { type: 'DOUBLE' },
-  date: { type: 'TIMESTAMP_MILLIS' },
-  in_stock: { type: 'BOOLEAN' }
+  name: { type: "UTF8" },
+  quantity: { type: "INT64" },
+  price: { type: "DOUBLE" },
+  date: { type: "TIMESTAMP_MILLIS" },
+  in_stock: { type: "BOOLEAN" },
 });
