@@ -4,6 +4,6 @@
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true,
     "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
     }
 }

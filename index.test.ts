@@ -54,8 +54,10 @@ describe("write, read", () => {
     // read all records from the file and print them
     let record: RowInterface;
     while ((record = await cursor.next())) {
-      console.log(record);
-      const result = data.find((d) => d.name == record.name);
+      const f = record as Fruit;
+      expect(f).not.toBeNull();
+      console.log(f);
+      const result = data.find((d) => d.name == f.name);
       expect(result).toBeDefined();
     }
 
