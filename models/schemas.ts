@@ -17,3 +17,4 @@ export const vendorSchema = new parquet.ParquetSchema({
   date: { type: "TIMESTAMP_MILLIS" },
   in_stock: { type: "BOOLEAN" },
 });
+

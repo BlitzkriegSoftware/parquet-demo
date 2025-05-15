@@ -48,13 +48,14 @@ describe("write, read", () => {
     /* READ */
 
     const reader = await parquet.ParquetReader.openFile(filename);
-    // create a new cursor
-    const cursor = reader.getCursor();
+    const cursor = reader.getCursor(); // create a new cursor
+    
+    console.table(reader.schema.fields); // Dump Schema
 
     // read all records from the file and print them
     let record: RowInterface;
     while ((record = await cursor.next())) {
-      const f = record as Fruit;
+      const f = record as Fruit; // This feels unsatisfactory
       expect(f).not.toBeNull();
       console.log(f);
       const result = data.find((d) => d.name == f.name);
