@@ -2,6 +2,10 @@
 
 a demo of the parquet file format
 
+## To run demo
+
+Run the tests in [./index.test.ts](index.test.ts)
+
 ## see
 
 * https://www.npmjs.com/package/parquetjs
